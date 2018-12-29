@@ -1,4 +1,4 @@
 name: CraftLibs
 version: 1.0.0
 author: Nerdy42
-main: cz.craftmania.libs.Main
+main: cz.craftmania.libs.CraftLibs

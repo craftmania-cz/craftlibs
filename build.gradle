@@ -29,6 +29,7 @@ dependencies {
     compileOnly ('org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT') {
         exclude group: 'net.md-5'
     }
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
 }
 
 task compilePlugin(type: Jar) {
