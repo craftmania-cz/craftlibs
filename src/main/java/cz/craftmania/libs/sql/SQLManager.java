@@ -1,6 +1,5 @@
 package cz.craftmania.libs.sql;
 
-import com.zaxxer.hikari.HikariDataSource;
 import cz.craftmania.libs.CraftLibs;
 import cz.craftmania.libs.utils.Log;
 
@@ -10,10 +9,8 @@ import java.util.ArrayList;
 
 public class SQLManager {
 
-
     private final CraftLibs plugin;
     private final ConnectionPoolManager pool;
-    private HikariDataSource dataSource;
 
     public SQLManager(CraftLibs plugin) {
         this.plugin = plugin;
@@ -30,7 +27,7 @@ public class SQLManager {
         return pool;
     }
 
-    public ArrayList<DBRow> queryAll(String query, Object... variables) {
+    public ArrayList<DBRow> query(String query, Object... variables) {
         final Long time = System.currentTimeMillis();
         final ArrayList<DBRow> rows = new ArrayList<>();
         ResultSet result = null;
@@ -91,48 +88,6 @@ public class SQLManager {
             Log.fatal("This query is taking too long (" + diff + "ms): '" + query + "'");
         }
         return rows;
-    }
-
-    public void query(String query, Object... variables) {
-        final long time = System.currentTimeMillis();
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = this.pool.getConnection();
-            ps = conn.prepareStatement(query);
-            for (int i = 1; i <= variables.length; ++i) {
-                Object obj = variables[i - 1];
-                if (obj != null && obj.toString().equalsIgnoreCase("null")) {
-                    obj = null;
-                }
-                if (obj instanceof Blob) {
-                    ps.setBlob(i, (Blob) obj);
-                } else if (obj instanceof InputStream) {
-                    ps.setBinaryStream(i, (InputStream) obj);
-                } else if (obj instanceof byte[]) {
-                    ps.setBytes(i, (byte[]) obj);
-                } else if (obj instanceof Boolean) {
-                    ps.setBoolean(i, (boolean) obj);
-                } else if (obj instanceof Integer) {
-                    ps.setInt(i, (int) obj);
-                } else if (obj instanceof String) {
-                    ps.setString(i, (String) obj);
-                } else {
-                    ps.setObject(i, obj);
-                }
-            }
-            ps.executeUpdate();
-        } catch (Exception ex) {
-            Log.fatal("§cSEVERE: Error has occured in query: '" + query + "'");
-            ex.printStackTrace();
-        } finally {
-            pool.close(conn, ps, null);
-        }
-        final Long diff = System.currentTimeMillis() - time;
-        Log.debug("This query takes " + diff + "ms: '" + query + "'");
-        if (diff > 500L) {
-            Log.fatal("§cSEVERE: This query is taking too long (" + diff + "ms): '" + query + "'");
-        }
     }
 
 }
