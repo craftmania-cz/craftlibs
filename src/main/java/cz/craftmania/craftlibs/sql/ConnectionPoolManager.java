@@ -1,8 +1,8 @@
-package cz.craftmania.libs.sql;
+package cz.craftmania.craftlibs.sql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import cz.craftmania.libs.CraftLibs;
+import cz.craftmania.craftlibs.CraftLibs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package cz.craftmania.libs.sql;
+package cz.craftmania.craftlibs.sql;
 
 import java.sql.Timestamp;
 import java.util.Date;

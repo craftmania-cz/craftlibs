@@ -1,7 +1,7 @@
-package cz.craftmania.libs.sql;
+package cz.craftmania.craftlibs.sql;
 
-import cz.craftmania.libs.CraftLibs;
-import cz.craftmania.libs.utils.Log;
+import cz.craftmania.craftlibs.CraftLibs;
+import cz.craftmania.craftlibs.utils.Log;
 
 import java.io.InputStream;
 import java.sql.*;

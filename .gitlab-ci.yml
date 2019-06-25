@@ -34,4 +34,4 @@ build:
   artifacts:
     expire_in: 1 week
     paths:
-    - build/libs/*.jar
+    - build/craftlibs/*.jar

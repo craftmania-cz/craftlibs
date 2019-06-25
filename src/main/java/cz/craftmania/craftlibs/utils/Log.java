@@ -1,4 +1,4 @@
-package cz.craftmania.libs.utils;
+package cz.craftmania.craftlibs.utils;
 
 public class Log {
 

@@ -1,7 +1,7 @@
-package cz.craftmania.libs;
+package cz.craftmania.craftlibs;
 
-import cz.craftmania.libs.sql.SQLManager;
-import cz.craftmania.libs.utils.Log;
+import cz.craftmania.craftlibs.sql.SQLManager;
+import cz.craftmania.craftlibs.utils.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CraftLibs extends JavaPlugin {

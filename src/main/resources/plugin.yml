@@ -1,4 +1,4 @@
 name: CraftLibs
-version: 1.0.0
+version: ${version}
 author: Nerdy42
-main: cz.craftmania.libs.CraftLibs
+main: cz.craftmania.craftlibs.CraftLibs
