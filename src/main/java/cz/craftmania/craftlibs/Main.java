@@ -1,19 +1,21 @@
 package cz.craftmania.craftlibs;
 
+import cz.craftmania.craftlibs.managers.BalanceManager;
 import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CraftLibs extends JavaPlugin {
+public class Main extends JavaPlugin {
 
-    private static CraftLibs instance;
+    private static Main instance;
 
     private static SQLManager sqlManager;
+    private BalanceManager balanceManager;
 
     @Override
     public void onEnable() {
         final long startMillis = System.currentTimeMillis();
-        Log.info("Loading CraftLibs (v" + getDescription().getVersion() + ")");
+        Log.info("Loading Main (v" + getDescription().getVersion() + ")");
 
         // Instance
         instance = this;
@@ -22,10 +24,11 @@ public class CraftLibs extends JavaPlugin {
         saveConfig();
 
         sqlManager = new SQLManager(this);
+        balanceManager = new BalanceManager(this);
 
         Log.send(" ");
         final long diff = System.currentTimeMillis() - startMillis;
-        Log.success("CraftLibs loaded (" + diff + "ms)");
+        Log.success("Main loaded (" + diff + "ms)");
 
     }
 
@@ -35,11 +38,15 @@ public class CraftLibs extends JavaPlugin {
         sqlManager.onDisable();
     }
 
-    public static CraftLibs getInstance() {
+    public static Main getInstance() {
         return instance;
     }
 
     public static SQLManager getSqlManager() {
         return sqlManager;
+    }
+
+    public BalanceManager getBalanceManager() {
+        return balanceManager;
     }
 }

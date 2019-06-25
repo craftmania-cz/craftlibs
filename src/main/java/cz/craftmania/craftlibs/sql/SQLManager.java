@@ -1,6 +1,6 @@
 package cz.craftmania.craftlibs.sql;
 
-import cz.craftmania.craftlibs.CraftLibs;
+import cz.craftmania.craftlibs.Main;
 import cz.craftmania.craftlibs.utils.Log;
 
 import java.io.InputStream;
@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 public class SQLManager {
 
-    private final CraftLibs plugin;
+    private final Main plugin;
     private final ConnectionPoolManager pool;
 
-    public SQLManager(CraftLibs plugin) {
+    public SQLManager(Main plugin) {
         this.plugin = plugin;
         pool = new ConnectionPoolManager(plugin);
 

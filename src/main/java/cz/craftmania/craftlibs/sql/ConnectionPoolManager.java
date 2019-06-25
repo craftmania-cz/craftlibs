@@ -2,7 +2,7 @@ package cz.craftmania.craftlibs.sql;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import cz.craftmania.craftlibs.CraftLibs;
+import cz.craftmania.craftlibs.Main;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class ConnectionPoolManager {
 
-    private final CraftLibs plugin;
+    private final Main plugin;
     private HikariDataSource dataSource;
     private String host;
     private String port;
@@ -23,7 +23,7 @@ public class ConnectionPoolManager {
     private long connectionTimeout;
     private String poolName;
 
-    public ConnectionPoolManager(CraftLibs plugin) {
+    public ConnectionPoolManager(Main plugin) {
         this.plugin = plugin;
         init();
         setupPool();
