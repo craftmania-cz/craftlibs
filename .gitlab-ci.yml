@@ -19,7 +19,6 @@ cache:
   paths:
   - .gradle/wrapper
   - .gradle/caches
-  - target/
 
 validate:
   stage: validate
@@ -34,4 +33,4 @@ build:
   artifacts:
     expire_in: 1 week
     paths:
-    - build/craftlibs/*.jar
+    - build/libs/*.jar
