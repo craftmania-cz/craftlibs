@@ -5,7 +5,7 @@ stages:
 - build
 #- review
 #- pages
-#- deploy
+- deploy
 
 before_script:
 #  - echo `pwd` # debug
@@ -34,3 +34,11 @@ build:
     expire_in: 1 week
     paths:
     - build/libs/*.jar
+
+deploy:release:
+  stage: deploy
+  script:
+    - './gradlew compilePlugin'
+    - './gradlew uploadArchives -PnexusUsername=$PACKAGES_USER -PnexusPassword=$PACKAGES_PASSWORD'
+  only:
+    - tags
