@@ -6,7 +6,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import cz.craftmania.craftlibs.Main;
+import cz.craftmania.craftlibs.CraftLibs;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -17,18 +17,18 @@ import java.util.function.Consumer;
 public class BalanceManager implements PluginMessageListener {
 
     private final Multimap<MessageContext, Consumer<ByteArrayDataInput>> contexts = LinkedHashMultimap.create();
-    private final Main plugin;
+    private final CraftLibs plugin;
 
-    public BalanceManager(Main plugin) {
+    public BalanceManager(CraftLibs plugin) {
         this.plugin = plugin;
 
-        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "PlayerBalancer", this);
-        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "PlayerBalancer");
+        plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "playerbalancer:main", this);
+        plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "playerbalancer:main");
     }
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        if (channel.equals("PlayerBalancer")) {
+        if (channel.equals("playerbalancer:main")) {
             ByteArrayDataInput in = ByteStreams.newDataInput(message);
             String subchannel = in.readUTF();
 
@@ -52,7 +52,7 @@ public class BalanceManager implements PluginMessageListener {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Connect");
         out.writeUTF(section);
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -63,7 +63,7 @@ public class BalanceManager implements PluginMessageListener {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("FallbackPlayer");
         out.writeUTF(player.getName());
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -83,12 +83,12 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF(section);
 
         contexts.put(new MessageContext(
-                "PlayerBalancer",
+                "playerbalancer:main",
                 "GetSectionByName",
                 player.getUniqueId()
         ), (response) -> consumer.accept(response.readUTF()));
 
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
         return true;
     }
 
@@ -109,12 +109,12 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF(server);
 
         contexts.put(new MessageContext(
-                "PlayerBalancer",
+                "playerbalancer:main",
                 "GetSectionByServer",
                 player.getUniqueId()
         ), (response) -> consumer.accept(response.readUTF()));
 
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
         return true;
     }
 
@@ -129,12 +129,12 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF(player.getName());
 
         contexts.put(new MessageContext(
-                "PlayerBalancer",
+                "playerbalancer:main",
                 "GetSectionOfPlayer",
                 player.getUniqueId()
         ), (response) -> consumer.accept(response.readUTF()));
 
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -154,12 +154,12 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF(player.getName());
 
         contexts.put(new MessageContext(
-                "PlayerBalancer",
+                "playerbalancer:main",
                 "GetServerStatus",
                 player.getUniqueId()
         ), (response) -> consumer.accept(response.readUTF()));
 
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
         return true;
     }
 
@@ -180,12 +180,12 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF(section);
 
         contexts.put(new MessageContext(
-                "PlayerBalancer",
+                "playerbalancer:main",
                 "GetSectionPlayerCount",
                 player.getUniqueId()
         ), (response) -> consumer.accept(response.readInt()));
 
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
         return true;
     }
 
@@ -196,7 +196,7 @@ public class BalanceManager implements PluginMessageListener {
     public void clearPlayerBypass(Player player) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("ClearPlayerBypass");
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -206,7 +206,7 @@ public class BalanceManager implements PluginMessageListener {
     public void setPlayerBypass(Player player) {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("SetPlayerBypass");
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -219,7 +219,7 @@ public class BalanceManager implements PluginMessageListener {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("BypassConnect");
         out.writeUTF(server);
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
     }
 
     /**
@@ -236,7 +236,7 @@ public class BalanceManager implements PluginMessageListener {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("ClearStatusOverride");
         out.writeUTF(server);
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
 
         return true;
     }
@@ -257,7 +257,7 @@ public class BalanceManager implements PluginMessageListener {
         out.writeUTF("SetStatusOverride");
         out.writeUTF(server);
         out.writeBoolean(status);
-        player.sendPluginMessage(plugin, "PlayerBalancer", out.toByteArray());
+        player.sendPluginMessage(plugin, "playerbalancer:main", out.toByteArray());
 
         return true;
     }

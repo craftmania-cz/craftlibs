@@ -5,9 +5,9 @@ import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin {
+public class CraftLibs extends JavaPlugin {
 
-    private static Main instance;
+    private static CraftLibs instance;
 
     private static SQLManager sqlManager;
     private BalanceManager balanceManager;
@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
         sqlManager.onDisable();
     }
 
-    public static Main getInstance() {
+    public static CraftLibs getInstance() {
         return instance;
     }
 
