@@ -8,7 +8,7 @@ apply plugin: 'maven'
 
 group 'cz.craftmania.craftlibs'
 
-def mainVersion = '1.0.3'
+def mainVersion = '1.0.4'
 def branch = "?"
 def gitId = ""
 
