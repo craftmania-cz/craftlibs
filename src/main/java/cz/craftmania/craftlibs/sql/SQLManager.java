@@ -42,28 +42,8 @@ public class SQLManager {
             PreparedStatement pState = null;
             try {
                 connection = pool.getConnection();
-                pState = connection.prepareStatement(query);
-                for (int i = 1; i <= variables.length; ++i) {
-                    Object obj = variables[i - 1];
-                    if (obj != null && obj.toString().equalsIgnoreCase("null")) {
-                        obj = null;
-                    }
-                    if (obj instanceof Blob) {
-                        pState.setBlob(i, (Blob) obj);
-                    } else if (obj instanceof InputStream) {
-                        pState.setBinaryStream(i, (InputStream) obj);
-                    } else if (obj instanceof byte[]) {
-                        pState.setBytes(i, (byte[]) obj);
-                    } else if (obj instanceof Boolean) {
-                        pState.setBoolean(i, (boolean) obj);
-                    } else if (obj instanceof Integer) {
-                        pState.setInt(i, (int) obj);
-                    } else if (obj instanceof String) {
-                        pState.setString(i, (String) obj);
-                    } else {
-                        pState.setObject(i, obj);
-                    }
-                }
+                pState = this.getPreparedStatement(connection.prepareStatement(query), query, variables);
+
                 if (pState.execute()) {
                     result = pState.getResultSet();
                 }
@@ -96,4 +76,61 @@ public class SQLManager {
         return completableFuture;
     }
 
+    public CompletableFuture<Integer> insertAndReturnLastInsertedId(String query, Object... variables){
+        CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
+
+        Bukkit.getScheduler().runTaskAsynchronously(CraftLibs.getInstance(), () -> {
+            final Long time = System.currentTimeMillis();
+            Connection connection = null;
+            ResultSet result = null;
+            PreparedStatement pState = null;
+            try {
+                connection = pool.getConnection();
+                pState = this.getPreparedStatement(connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS), query, variables);
+                pState.executeUpdate();
+
+                ResultSet rs = pState.getGeneratedKeys();
+                rs.next();
+                completableFuture.complete(rs.getInt(1));
+
+            } catch (Exception ex) {
+                Log.fatal("Error has occured in query: '" + query + "'");
+                completableFuture.completeExceptionally(new Exception("Error has occured in query: '" + query + "'"));
+                ex.printStackTrace();
+            } finally {
+                pool.close(connection, pState, result);
+            }
+            final Long diff = System.currentTimeMillis() - time;
+            if (diff > 500L) {
+                Log.fatal("This query is taking too long (" + diff + "ms): '" + query + "'");
+            }
+        });
+
+        return completableFuture;
+    }
+
+    private PreparedStatement getPreparedStatement(PreparedStatement pState, String query, Object... variables) throws SQLException {
+        for (int i = 1; i <= variables.length; ++i) {
+            Object obj = variables[i - 1];
+            if (obj != null && obj.toString().equalsIgnoreCase("null")) {
+                obj = null;
+            }
+            if (obj instanceof Blob) {
+                pState.setBlob(i, (Blob) obj);
+            } else if (obj instanceof InputStream) {
+                pState.setBinaryStream(i, (InputStream) obj);
+            } else if (obj instanceof byte[]) {
+                pState.setBytes(i, (byte[]) obj);
+            } else if (obj instanceof Boolean) {
+                pState.setBoolean(i, (boolean) obj);
+            } else if (obj instanceof Integer) {
+                pState.setInt(i, (int) obj);
+            } else if (obj instanceof String) {
+                pState.setString(i, (String) obj);
+            } else {
+                pState.setObject(i, obj);
+            }
+        }
+        return pState;
+    }
 }
