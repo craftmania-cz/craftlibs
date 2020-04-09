@@ -1,4 +1,5 @@
 sql:
+  enabled: false
   hostname: host
   port: 3306
   database: database
@@ -9,3 +10,9 @@ settings:
   maximumConnections: 5
   timeout: 30000
   poolname: CraftLibs
+
+
+updater:
+  enabled: false
+  plugins:
+    - 'example'
