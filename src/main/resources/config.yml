@@ -16,3 +16,9 @@ updater:
   enabled: false
   plugins:
     - 'example'
+
+sentry:
+  enabled: false
+  dsn: ''
+
+server-id: ''

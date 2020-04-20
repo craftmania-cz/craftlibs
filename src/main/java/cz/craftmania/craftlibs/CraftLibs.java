@@ -1,8 +1,9 @@
 package cz.craftmania.craftlibs;
 
-import cz.craftmania.craftlibs.exceptions.SQLNotEnabledException;
+import cz.craftmania.craftlibs.exceptions.CraftLibsFeatureNotEnabledException;
 import cz.craftmania.craftlibs.managers.BalanceManager;
 import cz.craftmania.craftlibs.managers.UpdateManager;
+import cz.craftmania.craftlibs.sentry.CraftSentry;
 import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CraftLibs extends JavaPlugin {
 
     private static CraftLibs instance;
+
+    public static String SERVER;
 
     private static boolean sqlEnabled;
     private boolean updaterEnabled;
@@ -28,6 +31,8 @@ public class CraftLibs extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
+        SERVER = getConfig().getString("server-id");
+
         sqlEnabled = getConfig().getBoolean("sql.enabled");
         this.updaterEnabled = getConfig().getBoolean("updater.enabled");
 
@@ -36,9 +41,17 @@ public class CraftLibs extends JavaPlugin {
         }
         balanceManager = new BalanceManager(this);
 
+        Log.debug("SENTRY DSN: " + getConfig().getString("sentry.dsn"));
+        new CraftSentry(getConfig().getConfigurationSection("sentry"));
         Log.send(" ");
         final long diff = System.currentTimeMillis() - startMillis;
         Log.success("CraftLibs loaded (" + diff + "ms)");
+
+        try {
+            unsafeMethod();
+        } catch (Exception e) {
+            CraftSentry.sendException(e);
+        }
 
     }
 
@@ -49,7 +62,7 @@ public class CraftLibs extends JavaPlugin {
             sqlManager.onDisable();
         }
 
-        if(this.updaterEnabled){
+        if (this.updaterEnabled) {
             new UpdateManager().update();
         }
 
@@ -61,14 +74,18 @@ public class CraftLibs extends JavaPlugin {
         return instance;
     }
 
-    public static SQLManager getSqlManager() throws SQLNotEnabledException {
+    public static SQLManager getSqlManager() throws CraftLibsFeatureNotEnabledException {
         if (!sqlEnabled) {
-            throw new SQLNotEnabledException();
+            throw new CraftLibsFeatureNotEnabledException("SQL feature is not enabled in CraftLibs");
         }
         return sqlManager;
     }
 
     public BalanceManager getBalanceManager() {
         return balanceManager;
+    }
+
+    void unsafeMethod() throws Exception {
+        throw new Exception("CraftLibs Test exception");
     }
 }
