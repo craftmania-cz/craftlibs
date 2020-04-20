@@ -53,6 +53,7 @@ repositories {
     mavenCentral()
     maven { url "https://packages.craftmania.cz/repository/craftmania/" }
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "https://papermc.io/repo/repository/maven-public/" }
 }
 
 processResources {
@@ -79,10 +80,12 @@ artifacts {
 }
 
 dependencies {
-    compileOnly ('org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT') {
-        exclude group: 'net.md-5'
-    }
+    compileOnly ('com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT')
+
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
+    compile 'io.sentry:sentry:1.7.30'
+    compile 'io.sentry:sentry-log4j2:1.7.30'
+    compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
 }
 
 uploadArchives {
