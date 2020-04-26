@@ -41,18 +41,9 @@ public class CraftLibs extends JavaPlugin {
         }
         balanceManager = new BalanceManager(this);
 
-        Log.debug("SENTRY DSN: " + getConfig().getString("sentry.dsn"));
-        new CraftSentry(getConfig().getConfigurationSection("sentry"));
         Log.send(" ");
         final long diff = System.currentTimeMillis() - startMillis;
         Log.success("CraftLibs loaded (" + diff + "ms)");
-
-        try {
-            unsafeMethod();
-        } catch (Exception e) {
-            CraftSentry.sendException(e);
-        }
-
     }
 
     @Override
@@ -83,9 +74,5 @@ public class CraftLibs extends JavaPlugin {
 
     public BalanceManager getBalanceManager() {
         return balanceManager;
-    }
-
-    void unsafeMethod() throws Exception {
-        throw new Exception("CraftLibs Test exception");
     }
 }

@@ -8,7 +8,6 @@ import io.sentry.SentryClientFactory;
 import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
-import io.sentry.event.EventBuilder;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -17,47 +16,31 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
 public class CraftSentry {
 
-    private static SentryClient sentryClient;
+    private final SentryClient sentryClient;
+    private final SortedMap<String, String> loadedPlugins;
+    private final String version;
+    private final LinkedList<LogEvent> breadcrumbs = new LinkedList<>();
 
-    private static boolean enabled;
-
-    private static SortedMap<String, String> loadedPlugins;
-    private static String version;
-    private static final LinkedList<LogEvent> breadcrumbs = new LinkedList<>();
-
-
-    public CraftSentry(ConfigurationSection config) {
-        enabled = config.getBoolean("enabled");
-        if (!enabled) return;
-
-        sentryClient = SentryClientFactory.sentryClient(config.getString("dsn"));
-        loadedPlugins = getLoadedPlugins();
-        version = getServerVersion();
+    public CraftSentry(String dsn) {
+        this.sentryClient = SentryClientFactory.sentryClient(dsn);
+        this.loadedPlugins = getLoadedPlugins();
+        this.version = getServerVersion();
 
         Logger logger = (Logger) LogManager.getRootLogger();
 
-        sentryClient.setServerName(CraftLibs.SERVER);
+        //this.sentryClient.setServerName(CraftLibs.SERVER);
         int maximumEntries = 50;
 
-        //                    if (hasImmutableMethod) {
-        //                        event = event.toImmutable();
-        //                    }
         Appender breadcrumbAppender = new AbstractAppender("Breadcrumb Builder", null, null, false) {
             @Override
             public void append(LogEvent event) {
-
                 synchronized (breadcrumbs) {
-//                    if (hasImmutableMethod) {
-//                        event = event.toImmutable();
-//                    }
-
                     breadcrumbs.add(event);
                     if (breadcrumbs.size() > maximumEntries) {
                         breadcrumbs.removeFirst();
@@ -72,26 +55,21 @@ public class CraftSentry {
         Log.success("Sentry loaded");
     }
 
-    public static void sendException(Exception exception) throws CraftLibsFeatureNotEnabledException {
-        if (!enabled) {
-            throw new CraftLibsFeatureNotEnabledException("Sentry feature is not enabled in CraftLibs plugin");
-        }
-
+    public void sendException(Exception exception) throws CraftLibsFeatureNotEnabledException {
         Log.info("Sending sentry exception");
-        Context context = sentryClient.getContext();
+        Context context = this.sentryClient.getContext();
         context.clear();
 
         context.addExtra("TPS", Bukkit.getServer().getTPS());
         context.addExtra("Plugins", loadedPlugins);
         context.addExtra("Online players", Bukkit.getOnlinePlayers().size());
 
-        getBreadcrumbs().forEach(context::recordBreadcrumb);
+        this.getBreadcrumbs().forEach(context::recordBreadcrumb);
 
-        //context.addTag("server", CraftLibs.SERVER);
+        context.addTag("server", CraftLibs.SERVER);
         context.addTag("version", version);
 
         sentryClient.sendException(exception);
-
     }
 
     private SortedMap<String, String> getLoadedPlugins() {
@@ -111,7 +89,7 @@ public class CraftSentry {
         return bukkitVersion;
     }
 
-    private static List<Breadcrumb> getBreadcrumbs() {
+    private List<Breadcrumb> getBreadcrumbs() {
         List<Breadcrumb> result = new ArrayList<>();
         List<LogEvent> breadcrumbsCopy = new ArrayList<>(breadcrumbs);
         for (LogEvent breadcrumbEvent : breadcrumbsCopy) {
@@ -149,7 +127,7 @@ public class CraftSentry {
         return result;
     }
 
-    private static Breadcrumb.Level getBreadcrumbLevel(LogEvent logEvent) {
+    private Breadcrumb.Level getBreadcrumbLevel(LogEvent logEvent) {
         if (logEvent.getLevel().equals(Level.WARN)) {
             return Breadcrumb.Level.WARNING;
         } else if (logEvent.getLevel().equals(Level.ERROR)) {
