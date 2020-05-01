@@ -33,8 +33,8 @@ public class CraftLibs extends JavaPlugin {
 
         SERVER = getConfig().getString("server-id");
 
-        sqlEnabled = getConfig().getBoolean("sql.enabled");
-        this.updaterEnabled = getConfig().getBoolean("updater.enabled");
+        sqlEnabled = getConfig().getBoolean("sql.enabled", true);
+        this.updaterEnabled = getConfig().getBoolean("updater.enabled", false);
 
         if (sqlEnabled) {
             sqlManager = new SQLManager(this);
