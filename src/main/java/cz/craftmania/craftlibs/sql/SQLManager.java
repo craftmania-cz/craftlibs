@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
 
 public class SQLManager {
 
@@ -42,7 +40,7 @@ public class SQLManager {
             PreparedStatement pState = null;
             try {
                 connection = pool.getConnection();
-                pState = this.getPreparedStatement(connection.prepareStatement(query), query, variables);
+                pState = this.getPreparedStatement(connection.prepareStatement(query), variables);
 
                 if (pState.execute()) {
                     result = pState.getResultSet();
@@ -76,7 +74,7 @@ public class SQLManager {
         return completableFuture;
     }
 
-    public CompletableFuture<Integer> insertAndReturnLastInsertedId(String query, Object... variables){
+    public CompletableFuture<Integer> insertAndReturnLastInsertedId(String query, Object... variables) {
         CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(CraftLibs.getInstance(), () -> {
@@ -86,7 +84,7 @@ public class SQLManager {
             PreparedStatement pState = null;
             try {
                 connection = pool.getConnection();
-                pState = this.getPreparedStatement(connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS), query, variables);
+                pState = this.getPreparedStatement(connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS), variables);
                 pState.executeUpdate();
 
                 ResultSet rs = pState.getGeneratedKeys();
@@ -109,7 +107,7 @@ public class SQLManager {
         return completableFuture;
     }
 
-    private PreparedStatement getPreparedStatement(PreparedStatement pState, String query, Object... variables) throws SQLException {
+    private PreparedStatement getPreparedStatement(PreparedStatement pState, Object... variables) throws SQLException {
         for (int i = 1; i <= variables.length; ++i) {
             Object obj = variables[i - 1];
             if (obj != null && obj.toString().equalsIgnoreCase("null")) {
@@ -127,6 +125,10 @@ public class SQLManager {
                 pState.setInt(i, (int) obj);
             } else if (obj instanceof String) {
                 pState.setString(i, (String) obj);
+            } else if (obj instanceof Timestamp) {
+                pState.setTimestamp(i, (Timestamp) obj);
+            } else if (obj instanceof Long) {
+                pState.setLong(i, (Long) obj);
             } else {
                 pState.setObject(i, obj);
             }
