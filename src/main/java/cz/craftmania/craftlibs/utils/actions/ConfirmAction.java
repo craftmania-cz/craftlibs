@@ -4,6 +4,7 @@ import cz.craftmania.craftlibs.utils.Log;
 import cz.craftmania.craftlibs.utils.PlayerRunnable;
 import cz.craftmania.craftlibs.utils.StringUtils;
 import cz.craftmania.craftlibs.utils.task.RunnableHelper;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,14 +55,14 @@ public class ConfirmAction implements Listener {
             return this;
         }
 
-        private Builder addComponents(TextComponent... textComponents) {
-            List<TextComponent> list = this.action.getTextComponents();
+        private Builder addComponents(BaseComponent... textComponents) {
+            List<BaseComponent> list = this.action.getTextComponents();
             list.addAll(Arrays.asList(textComponents));
             this.action.setTextComponents(list);
             return this;
         }
 
-        public Builder addComponent(Function<Action, TextComponent> fun) {
+        public Builder addComponent(Function<Action, BaseComponent> fun) {
             this.addComponents(fun.apply(this.action));
             return this;
         }
@@ -101,7 +102,7 @@ public class ConfirmAction implements Listener {
         private PlayerRunnable playerRunnable;
         private PlayerRunnable expireRunnable;
         private boolean finished = false;
-        private List<TextComponent> textComponents = new ArrayList<>();
+        private List<BaseComponent> textComponents = new ArrayList<>();
         private long delay = 30L;
         
         @Override
@@ -124,7 +125,7 @@ public class ConfirmAction implements Listener {
         public void sendTextComponents() throws IdentifierNotSetException {
             if (identifier == null) throw new IdentifierNotSetException("Action must has set identifier.");
             Log.info("Sending text components for action (identifier: " + this.identifier + ") to " + this.player.getName() + ".");
-            for (TextComponent textComponent : textComponents) {
+            for (BaseComponent textComponent : textComponents) {
                 player.spigot().sendMessage(textComponent);
             }
 
@@ -160,7 +161,7 @@ public class ConfirmAction implements Listener {
             return finished;
         }
 
-        public List<TextComponent> getTextComponents() {
+        public List<BaseComponent> getTextComponents() {
             return textComponents;
         }
 
@@ -188,7 +189,7 @@ public class ConfirmAction implements Listener {
             this.finished = finished;
         }
 
-        public void setTextComponents(List<TextComponent> textComponents) {
+        public void setTextComponents(List<BaseComponent> textComponents) {
             this.textComponents = textComponents;
         }
 

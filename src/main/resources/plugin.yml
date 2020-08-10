@@ -2,3 +2,6 @@ name: CraftLibs
 version: ${version}
 author: Nerdy42
 main: cz.craftmania.craftlibs.CraftLibs
+commands:
+  confirmaction:
+    usage: /confirmaction <id>
