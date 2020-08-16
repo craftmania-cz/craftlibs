@@ -134,6 +134,8 @@ public class ConfirmAction implements Listener {
                 if (this.expireRunnable == null) return;
 
                 this.expireRunnable.run(this.player);
+                finished = true;
+                actionList.remove(this);
             }, delay * 20);
         }
 
