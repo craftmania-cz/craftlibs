@@ -92,8 +92,9 @@ public class ConfirmAction implements Listener {
     /**
      * Library that handles confirmable actions for administrators or players.
      * This object holds {@link PlayerRunnable} and {@link List} of {@link TextComponent} that are run and sent
-     * when action is ran - this class implements {@link Runnable}. Each action has its
-     * ID - long from 1 to 999. Action can be executed only once.
+     * when action is ran - this class implements {@link Runnable}. Each action has its own
+     * identifier. It is recommended to generate identifier with Builder method {@link Builder#generateIdentifier()}.
+     * Action can be executed only once and cannot be executed after it expired.
      */
     public static class Action implements Runnable {
 
@@ -122,6 +123,10 @@ public class ConfirmAction implements Listener {
             Log.info("Action (identifier: " + this.identifier + "; player: " + this.player.getName() + ") ran successfully.");
         }
 
+        /**
+         * Sends all {@link BaseComponent} to target player of action.
+         * @throws IdentifierNotSetException Identifier of action was not set.
+         */
         public void sendTextComponents() throws IdentifierNotSetException {
             if (identifier == null) throw new IdentifierNotSetException("Action must has set identifier.");
             Log.info("Sending text components for action (identifier: " + this.identifier + ") to " + this.player.getName() + ".");
@@ -139,6 +144,9 @@ public class ConfirmAction implements Listener {
             }, delay * 20);
         }
 
+        /**
+         * @return Command that has to be executed to run action's runnable.
+         */
         public String getConfirmationCommand() {
             return "confirmaction " + this.identifier;
         }
