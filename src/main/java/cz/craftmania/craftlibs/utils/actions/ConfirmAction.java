@@ -1,5 +1,6 @@
 package cz.craftmania.craftlibs.utils.actions;
 
+import cz.craftmania.craftlibs.CraftLibs;
 import cz.craftmania.craftlibs.utils.Log;
 import cz.craftmania.craftlibs.utils.PlayerRunnable;
 import cz.craftmania.craftlibs.utils.StringUtils;
@@ -148,7 +149,7 @@ public class ConfirmAction implements Listener {
          * @return Command that has to be executed to run action's runnable.
          */
         public String getConfirmationCommand() {
-            return "confirmaction " + this.identifier;
+            return CraftLibs.getInstance().getDescription().getName().toLowerCase() + ":confirmaction " + this.identifier;
         }
 
         public String getIdentifier() {
