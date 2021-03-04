@@ -14,28 +14,22 @@ public enum ChatInfo {
 
     private final String key;
     private final Color color;
-    private String message;
 
     ChatInfo(String key, Color color) {
         this.key = key;
         this.color = color;
     }
 
-    public ChatInfo message(String message) {
-        this.message = message;
-        return this;
+    public void sendTo(Player player, String message) {
+        player.sendMessage(this.key + " " + ChatColor.of(this.color) + message);
     }
 
-    public void sendTo(Player player) {
-        player.sendMessage(this.key + " " + ChatColor.of(this.color) + this.message);
-    }
-
-    public void sendTo(String player) {
+    public void sendTo(String player, String message) {
         if (Bukkit.getPlayer(player) == null) {
             return;
         }
         Player onlinePlayer = Bukkit.getPlayer(player);
         assert onlinePlayer != null;
-        onlinePlayer.sendMessage(this.key + " " + ChatColor.of(this.color) + this.message);
+        onlinePlayer.sendMessage(this.key + " " + ChatColor.of(this.color) + message);
     }
 }
