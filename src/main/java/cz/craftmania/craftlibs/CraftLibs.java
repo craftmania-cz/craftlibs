@@ -4,7 +4,6 @@ import cz.craftmania.craftlibs.command.ConfirmActionCommand;
 import cz.craftmania.craftlibs.exceptions.CraftLibsFeatureNotEnabledException;
 import cz.craftmania.craftlibs.managers.BalanceManager;
 import cz.craftmania.craftlibs.managers.UpdateManager;
-import cz.craftmania.craftlibs.sentry.CraftSentry;
 import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
 import cz.craftmania.craftlibs.utils.actions.ConfirmAction;
@@ -63,7 +62,7 @@ public class CraftLibs extends JavaPlugin {
         if (this.updaterEnabled) {
             new UpdateManager().update();
         }
-        
+
         RunnableHelper.setServerStopping();
 
         instance = null;

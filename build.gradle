@@ -80,7 +80,7 @@ artifacts {
 }
 
 dependencies {
-    compileOnly ('com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT')
+    compileOnly ('com.destroystokyo.paper:paper-api:1.16.2-R0.1-SNAPSHOT')
 
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
     compile 'io.sentry:sentry:1.7.30'
