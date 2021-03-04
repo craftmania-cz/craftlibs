@@ -8,6 +8,7 @@ import cz.craftmania.craftlibs.sentry.CraftSentry;
 import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
 import cz.craftmania.craftlibs.utils.actions.ConfirmAction;
+import cz.craftmania.craftlibs.utils.task.RunnableHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,6 +63,8 @@ public class CraftLibs extends JavaPlugin {
         if (this.updaterEnabled) {
             new UpdateManager().update();
         }
+        
+        RunnableHelper.setServerStopping();
 
         instance = null;
 
