@@ -17,6 +17,7 @@ public enum ServerColors {
     ROLE_BUILDER("#566fb8"),
     ROLE_ARTIST("#cea672"),
     ROLE_MODERATOR("#f78811"),
+    ROLE_TESTER("#8A0B50"),
     ROLE_OBSIDIAN("#8953ff"),
     ROLE_EMERALD("#35c48c"),
     ROLE_DIAMOND("#87cefa"),
