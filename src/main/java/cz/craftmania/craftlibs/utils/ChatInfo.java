@@ -8,10 +8,11 @@ import java.awt.*;
 
 public enum ChatInfo {
 
-    INFO("⻫", new Color(244, 158, 11)),
-    DANGER("⻬", new Color(220, 38, 37)),
-    SUCCESS("⻪", new Color(133, 204, 22)),
-    ECONOMY("⻮", new Color(17, 96, 67));
+    INFO("⻫", new Color(243, 196, 76)),
+    DANGER("⻬", new Color(239, 87, 86)),
+    SUCCESS("⻪", new Color(84, 160, 63)),
+    ECONOMY("⻮", new Color(35, 120, 90)),
+    SERVER("", new Color(88, 130, 180));
 
     private final String key;
     private final Color color;
