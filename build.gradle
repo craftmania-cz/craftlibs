@@ -86,6 +86,8 @@ dependencies {
     compile 'io.sentry:sentry:1.7.30'
     compile 'io.sentry:sentry-log4j2:1.7.30'
     compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
+
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
 }
 
 uploadArchives {
