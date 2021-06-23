@@ -5,12 +5,10 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group 'cz.craftmania.craftlibs'
-
 def mainVersion = '1.1.8'
-def branch = "?"
-def gitId = ""
 
 sourceCompatibility = 11
 targetCompatibility = 11
@@ -20,31 +18,8 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-ext {
-    try {
-        git = org.ajoberstar.grgit.Grgit.open(file(".git"))
-        date = git.head().date.format("yy.MM.dd")
-        //gitId = "-${git.head().abbreviatedId}"
-        gitId = "-SNAPSHOT"
-    } catch (Throwable ignore) {
-        gitId = "-unknown"
-    }
-    try {
-        git = org.ajoberstar.grgit.Grgit.open(file(".git"))
-        date = git.head().date.format("yy.MM.dd")
-        branch = "-${git.branch.current.fullName}".replace("refs/heads/", "")
-        print(branch)
-        if (branch.toString().equalsIgnoreCase("-master") || branch.toString().equalsIgnoreCase("-head")) {
-            branch = ""
-            gitId = ""
-        }
-    } catch (Throwable ignore) {
-        branch = "-unknown"
-    }
-}
-
 // Name-master-76735d.jar
-version = mainVersion + branch + gitId
+version = mainVersion
 
 clean { delete "./target" }
 clean { delete "./build" }
@@ -90,15 +65,20 @@ dependencies {
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
 }
 
-uploadArchives {
+publishing {
     repositories {
-        mavenDeployer {
-            repository(url: "${nexusUrl}/repository/release") {
-                authentication(userName: nexusUsername, password: nexusPassword)
+        maven {
+            name = "craftlibs"
+            url = uri("https://maven.pkg.github.com/craftmania-cz/craftlibs")
+            credentials {
+                username = GPR_USER
+                password = GPR_TOKEN
             }
-            snapshotRepository(url: "${nexusUrl}/repository/snapshots") {
-                authentication(userName: nexusUsername, password: nexusPassword)
-            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
