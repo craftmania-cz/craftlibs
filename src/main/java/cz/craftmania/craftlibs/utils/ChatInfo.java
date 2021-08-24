@@ -55,12 +55,10 @@ public enum ChatInfo {
      *
      * @param player Online hráč
      * @param message Zpráva, co se pošle hráči
-     * @return {@link ChatInfo}
      */
-    public ChatInfo send(@NotNull Player player, @NotNull String message) {
+    public void send(@NotNull Player player, @NotNull String message) {
         this.message = message;
         player.sendMessage(this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString()));
-        return this;
     }
 
     /**
@@ -71,18 +69,16 @@ public enum ChatInfo {
      *
      * @param player Online hráč
      * @param message Zpráva, co se pošle hráči
-     * @return {@link ChatInfo}
      */
     @Nullable
-    public ChatInfo send(@NotNull String player, @NotNull String message) {
+    public void send(@NotNull String player, @NotNull String message) {
         this.message = message;
         if (Bukkit.getPlayer(player) == null) {
-            return null;
+            return;
         }
         Player onlinePlayer = Bukkit.getPlayer(player);
         assert onlinePlayer != null;
         onlinePlayer.sendMessage(this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString()));
-        return this;
     }
 
     /**
