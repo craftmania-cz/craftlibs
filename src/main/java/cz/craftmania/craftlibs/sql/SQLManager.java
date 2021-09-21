@@ -33,7 +33,7 @@ public class SQLManager {
         CompletableFuture<ArrayList<DBRow>> completableFuture = new CompletableFuture<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(CraftLibs.getInstance(), () -> {
-            final Long time = System.currentTimeMillis();
+            final long time = System.currentTimeMillis();
             final ArrayList<DBRow> rows = new ArrayList<>();
             Connection connection = null;
             ResultSet result = null;
@@ -65,7 +65,7 @@ public class SQLManager {
             } finally {
                 pool.close(connection, pState, result);
             }
-            final Long diff = System.currentTimeMillis() - time;
+            final long diff = System.currentTimeMillis() - time;
             if (diff > 500L) {
                 Log.fatal("This query is taking too long (" + diff + "ms): '" + query + "'");
             }
@@ -78,7 +78,7 @@ public class SQLManager {
         CompletableFuture<Integer> completableFuture = new CompletableFuture<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(CraftLibs.getInstance(), () -> {
-            final Long time = System.currentTimeMillis();
+            final long time = System.currentTimeMillis();
             Connection connection = null;
             ResultSet result = null;
             PreparedStatement pState = null;
@@ -98,7 +98,7 @@ public class SQLManager {
             } finally {
                 pool.close(connection, pState, result);
             }
-            final Long diff = System.currentTimeMillis() - time;
+            final long diff = System.currentTimeMillis() - time;
             if (diff > 500L) {
                 Log.fatal("This query is taking too long (" + diff + "ms): '" + query + "'");
             }
