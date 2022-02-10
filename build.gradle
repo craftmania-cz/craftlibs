@@ -56,6 +56,9 @@ artifacts {
 
 dependencies {
     compileOnly ('com.destroystokyo.paper:paper-api:1.16.2-R0.1-SNAPSHOT')
+    compileOnly ('org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT') {
+        exclude group: 'net.md-5'
+    }
 
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
     compile 'io.sentry:sentry:1.7.30'
@@ -69,17 +72,19 @@ dependencies {
 publishing {
     repositories {
         maven {
-            name = "craftlibs"
-            url = uri("https://maven.pkg.github.com/craftmania-cz/craftlibs")
-            credentials {
-                username = GPR_USER
-                password = GPR_TOKEN
+            url "https://gitlab.com/api/v4/projects/33600299/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name = "Private-Token"
+                value = GITLAB_TOKEN
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
             }
         }
     }
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
+        library(MavenPublication) {
+            from components.java
         }
     }
 }
