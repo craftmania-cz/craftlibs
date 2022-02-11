@@ -1,10 +1,10 @@
 plugins {
     id 'java'
     id "org.ajoberstar.grgit" version "1.7.0"
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group 'cz.craftmania.craftlibs'
@@ -26,23 +26,20 @@ clean { delete "./build" }
 
 repositories {
     mavenCentral()
-    maven { url "https://packages.craftmania.cz/repository/craftmania/" }
     maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
     maven { url "https://papermc.io/repo/repository/maven-public/" }
 }
 
 processResources {
-    from('src/main/resources') {
-        include 'plugin.yml'
-        expand(
-                version: version
-        )
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
     }
 }
+shadowJar {
 
-task compilePlugin(type: Jar) {
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -60,13 +57,13 @@ dependencies {
         exclude group: 'net.md-5'
     }
 
-    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
-    compile 'io.sentry:sentry:1.7.30'
-    compile 'io.sentry:sentry-log4j2:1.7.30'
-    compile 'org.jetbrains:annotations:16.0.2'
-    compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
+    implementation group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
+    implementation 'io.sentry:sentry:1.7.30'
+    implementation 'io.sentry:sentry-log4j2:1.7.30'
+    implementation 'org.jetbrains:annotations:16.0.2'
+    implementation group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
 
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    compileOnly "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
 }
 
 publishing {
@@ -88,3 +85,5 @@ publishing {
         }
     }
 }
+
+build.dependsOn shadowJar
