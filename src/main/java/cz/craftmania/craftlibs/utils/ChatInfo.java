@@ -2,6 +2,7 @@ package cz.craftmania.craftlibs.utils;
 
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +60,17 @@ public enum ChatInfo {
     public void send(@NotNull Player player, @NotNull String message) {
         this.message = message;
         player.sendMessage(this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString()));
+    }
+
+    /**
+     * Odešle zvolenou zprávu {@link CommandSender} objektu, což může být {@link Player} i konzole.<br>
+     * Barvu dle klíče {@link ChatInfo} lze v textu používat jako "{c}"
+     * @param sender {@link CommandSender} - Online hráč či konzole
+     * @param message Zpráva, co se pošle hráči či konzoli
+     */
+    public void send(@NotNull CommandSender sender, @NotNull String message) {
+        this.message = message;
+        sender.sendMessage(processMessage(message));
     }
 
     /**
