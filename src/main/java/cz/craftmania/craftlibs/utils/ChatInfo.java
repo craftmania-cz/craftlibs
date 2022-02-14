@@ -91,4 +91,14 @@ public enum ChatInfo {
     public @NotNull String getMessage() {
         return message;
     }
+
+    /**
+     * Obohatí zprávu barvou, která byla zvolena klíčem v {@link ChatInfo}.<br>
+     * Barvu dle klíče {@link ChatInfo} lze v textu používat jako "{c}"
+     * @param message Zpráva na zpracování
+     * @return Zpracovaná zpráva s barvou
+     */
+    public @NotNull String processMessage(String message) {
+        return this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
+    }
 }
