@@ -67,11 +67,52 @@ public class SQLManager {
             }
             final long diff = System.currentTimeMillis() - time;
             if (diff > 500L) {
-                Log.fatal("This query is taking too long (" + diff + "ms): '" + query + "'");
+                Log.warning("This query is taking too long (" + diff + "ms): '" + query + "'");
             }
         });
 
         return completableFuture;
+    }
+
+    public ArrayList<DBRow> querySync(String query, Object... variables) {
+        final long time = System.currentTimeMillis();
+        final ArrayList<DBRow> rows = new ArrayList<>();
+        Connection connection = null;
+        ResultSet result = null;
+        PreparedStatement pState = null;
+        try {
+            connection = pool.getConnection();
+            pState = this.getPreparedStatement(connection.prepareStatement(query), variables);
+
+            if (pState.execute()) {
+                result = pState.getResultSet();
+            }
+            if (result != null) {
+                final ResultSetMetaData mtd = result.getMetaData();
+                final int columnCount = mtd.getColumnCount();
+                while (result.next()) {
+                    final DBRow row = new DBRow();
+                    for (int l = 0; l < columnCount; ++l) {
+                        final String columnName = mtd.getColumnName(l + 1);
+                        row.addCell(columnName, result.getObject(columnName));
+                    }
+                    rows.add(row);
+                }
+
+                return rows;
+            }
+        } catch (Exception ex) {
+            Log.fatal("Error has occured in query: '" + query + "'");
+            throw new RuntimeException("Error has occured in query: '" + query + "'", ex);
+        } finally {
+            pool.close(connection, pState, result);
+        }
+        final long diff = System.currentTimeMillis() - time;
+        if (diff > 500L) {
+            Log.warning("This query is taking too long (" + diff + "ms): '" + query + "'");
+        }
+
+        return null;
     }
 
     public CompletableFuture<Integer> insertAndReturnLastInsertedId(String query, Object... variables) {
