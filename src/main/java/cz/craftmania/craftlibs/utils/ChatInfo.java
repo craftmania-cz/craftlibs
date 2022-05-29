@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -39,7 +38,7 @@ public enum ChatInfo {
      */
     SERVER("⼧", new Color(88, 130, 180));
 
-    private final String key;
+    private String key;
     private final Color color;
     private String message;
 
@@ -111,5 +110,17 @@ public enum ChatInfo {
      */
     public @NotNull String processMessage(String message) {
         return this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
+    }
+
+    /**
+     * Přepis nastaveného prefixu na jiný, na základě Stringu.
+     *
+     * @param prefixKey Znak, který bude použit jako prefix.
+     * @return {@link ChatInfo}
+     * @param <T> Prefix
+     */
+    public <T extends String> ChatInfo overridePrefix(T prefixKey) {
+        this.key = prefixKey;
+        return this;
     }
 }
