@@ -41,11 +41,13 @@ public enum ChatInfo {
     private String key;
     private final Color color;
     private String message;
+    private String overrideKey;
 
     ChatInfo(String key, Color color) {
         this.key = key;
         this.color = color;
         this.message = "";
+        this.overrideKey = null;
     }
 
     /**
@@ -59,6 +61,7 @@ public enum ChatInfo {
     public void send(@NotNull Player player, @NotNull String message) {
         this.message = message;
         player.sendMessage(processMessage(message));
+        if (overrideKey != null) this.overrideKey = null;
     }
 
     /**
@@ -70,6 +73,7 @@ public enum ChatInfo {
     public void send(@NotNull CommandSender sender, @NotNull String message) {
         this.message = message;
         sender.sendMessage(processMessage(message));
+        if (overrideKey != null) this.overrideKey = null;
     }
 
     /**
@@ -89,6 +93,7 @@ public enum ChatInfo {
         Player onlinePlayer = Bukkit.getPlayer(player);
         assert onlinePlayer != null;
         onlinePlayer.sendMessage(processMessage(message));
+        if (overrideKey != null) this.overrideKey = null;
     }
 
     /**
@@ -109,6 +114,9 @@ public enum ChatInfo {
      * @return Zpracovaná zpráva s barvou
      */
     public @NotNull String processMessage(String message) {
+        if (overrideKey != null) {
+            return this.overrideKey + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
+        }
         return this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
     }
 
@@ -120,7 +128,7 @@ public enum ChatInfo {
      * @param <T> Prefix
      */
     public <T extends String> ChatInfo overridePrefix(T prefixKey) {
-        this.key = prefixKey;
+        this.overrideKey = prefixKey;
         return this;
     }
 }
