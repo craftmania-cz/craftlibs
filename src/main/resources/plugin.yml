@@ -2,6 +2,7 @@ name: CraftLibs
 version: ${version}
 author: Nerdy42
 main: cz.craftmania.craftlibs.CraftLibs
+api-version: 1.16
 commands:
   confirmaction:
     usage: /confirmaction <id>
