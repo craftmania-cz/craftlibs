@@ -21,7 +21,9 @@ public enum ChatInfo {
     /**
      * Vystražná zpráva, s vyšší prioritou upozornění.
      */
+    @Deprecated
     DANGER("⻬", new Color(239, 87, 86)),
+    ERROR("⻬", new Color(239, 87, 86)),
 
     /**
      * Zpráva o úspěšné provedené akci.
@@ -31,7 +33,11 @@ public enum ChatInfo {
     /**
      * Zpráva používající se hlavně k zasílání informačních ekonomických zpráv.
      */
+    @Deprecated
     ECONOMY("⻮", new Color(35, 120, 90)),
+    BANK_SUCCESS("⻮", new Color(35, 120, 90)),
+    BANK_DANGER("쇛", new Color(239, 87, 86)),
+    BANK_INFO("쇜", new Color(243, 196, 76)),
 
     /**
      * Zpráva s vyšší prioritou a prefixem [Server].
@@ -127,6 +133,7 @@ public enum ChatInfo {
      * @return {@link ChatInfo}
      * @param <T> Prefix
      */
+    @Deprecated
     public <T extends String> ChatInfo overridePrefix(T prefixKey) {
         this.overrideKey = prefixKey;
         return this;
