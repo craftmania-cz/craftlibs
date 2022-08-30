@@ -1,8 +1,16 @@
 name: CraftLibs
+description: Basic library contains everything what our plugins could use.
 version: ${version}
-author: Nerdy42
+authors:
+  - Nerdy42
+  - MrWakeCZ
+  - Lilmayu
 main: cz.craftmania.craftlibs.CraftLibs
 api-version: 1.16
+libraries:
+  - "org.jetbrains.kotlin:kotlin-stdlib:1.6.20"
+
+
 commands:
   confirmaction:
     usage: /confirmaction <id>
