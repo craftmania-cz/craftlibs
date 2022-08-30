@@ -11,8 +11,8 @@ plugins {
     id("org.ajoberstar.grgit") version "5.0.0"
 }
 
-group = "cz.craftmania.craftlibs"
-val VERSION = getVersionNumber()
+group = "cz.craftmania"
+val VERSION = "2.0.0.beta.1"
 print("Version: " + getVersionNumber())
 
 repositories {
@@ -78,7 +78,7 @@ java {
 publishing {
     repositories {
         maven {
-            url = uri("https://gitlab.com/api/v4/projects/37514561/packages/maven")
+            url = uri("https://gitlab.com/api/v4/projects/33600299/packages/maven")
             credentials(HttpHeaderCredentials::class){
                 name = "Private-Token"
                 value = GITLAB_TOKEN
