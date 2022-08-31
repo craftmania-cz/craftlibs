@@ -125,7 +125,8 @@ public class ItemBuilder {
             meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemStack.setItemMeta(meta);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -140,7 +141,8 @@ public class ItemBuilder {
             ItemMeta meta = itemStack.getItemMeta();
             meta.addItemFlags(flag);
             itemStack.setItemMeta(meta);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -155,7 +157,8 @@ public class ItemBuilder {
             ItemMeta meta = itemStack.getItemMeta();
             meta.addItemFlags(ItemFlag.valueOf(flag));
             itemStack.setItemMeta(meta);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -166,13 +169,14 @@ public class ItemBuilder {
      *
      * @return ItemBuilder
      */
-    public ItemBuilder setGlowing(){
+    public ItemBuilder setGlowing() {
         try {
             ItemMeta meta = itemStack.getItemMeta();
             meta.addEnchant(Enchantment.DURABILITY, 0, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemStack.setItemMeta(meta);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return this;
     }
 
@@ -416,7 +420,8 @@ public class ItemBuilder {
             LeatherArmorMeta im = (LeatherArmorMeta) itemStack.getItemMeta();
             im.setColor(color);
             itemStack.setItemMeta(im);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
@@ -466,15 +471,16 @@ public class ItemBuilder {
             SkullMeta im = (SkullMeta) itemStack.getItemMeta();
             im.setOwningPlayer(owner);
             itemStack.setItemMeta(im);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
     /**
      * Add custom model data for resource packs
      *
-     * @param data  Data
-     * @return      ItemBuilder
+     * @param data Data
+     * @return ItemBuilder
      */
     public ItemBuilder setCustomModelData(int data) {
         try {
@@ -482,7 +488,8 @@ public class ItemBuilder {
             im.setCustomModelData(data);
             itemStack.setItemMeta(im);
             return this;
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
@@ -491,7 +498,8 @@ public class ItemBuilder {
             NBTItem nbtItem = new NBTItem(itemStack);
             nbtItem.setInteger("PickupDelay", 32767);
             nbtItem.applyNBT(itemStack);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
@@ -500,7 +508,8 @@ public class ItemBuilder {
             NBTItem nbtItem = new NBTItem(itemStack);
             nbtItem.setInteger("PickupDelay", value);
             nbtItem.applyNBT(itemStack);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
@@ -509,7 +518,8 @@ public class ItemBuilder {
             NBTItem nbtItem = new NBTItem(itemStack);
             nbtItem.setInteger("Age", -32768);
             nbtItem.applyNBT(itemStack);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
@@ -518,7 +528,8 @@ public class ItemBuilder {
             NBTItem nbtItem = new NBTItem(itemStack);
             nbtItem.setInteger("Age", value);
             nbtItem.applyNBT(itemStack);
-        } catch (ClassCastException ignored) {}
+        } catch (ClassCastException ignored) {
+        }
         return this;
     }
 
