@@ -19,6 +19,7 @@ repositories {
     mavenCentral()
     maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
     maven { url = uri("https://repo.aikar.co/content/groups/aikar/") }
+    maven { url = uri("https://repo.codemc.org/repository/maven-public/")} // nbt-api
     maven {
         url = uri("https://gitlab.com/api/v4/groups/craftmania/-/packages/maven")
         name = "Gitlab"
@@ -44,6 +45,9 @@ dependencies {
     implementation("org.jetbrains:annotations:16.0.2")
     implementation("org.slf4j:slf4j-nop:1.7.30")
     compileOnly("jakarta.xml.bind:jakarta.xml.bind-api:2.3.2")
+
+    implementation("de.tr7zw:item-nbt-api:2.9.2")
+    implementation("de.tr7zw:nbt-injector:2.9.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -60,7 +64,13 @@ tasks.withType<ShadowJar>{
     archiveVersion.set(VERSION)
 
     dependencies {
+        include(dependency("de.tr7zw:item-nbt-api:2.9.2"))
+        include(dependency("de.tr7zw:nbt-injector:2.9.2"))
+
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+
+        relocate("de.tr7zw.changeme.nbtapi", "cz.craftmania.craftlibs.externals.nbtapi")
+        relocate("de.tr7zw.nbtinjector", "cz.craftmania.craftlibs.externals.nbtapi")
     }
 }
 
