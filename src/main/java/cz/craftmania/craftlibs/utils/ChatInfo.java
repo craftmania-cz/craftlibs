@@ -1,10 +1,16 @@
 package cz.craftmania.craftlibs.utils;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -66,7 +72,22 @@ public enum ChatInfo {
      */
     public void send(@NotNull Player player, @NotNull String message) {
         this.message = message;
-        player.sendMessage(processMessage(message));
+        player.sendMessage(processMessage(message, null));
+        if (overrideKey != null) this.overrideKey = null;
+    }
+
+    /**
+     * Odešle zvolenou zprávu online hráči.
+     *
+     * Barvu dle klíče {@link ChatInfo} lze v textu používat jako "{c}"
+     *
+     * @param player Online hráč
+     * @param message Zpráva, co se pošle hráči
+     * @param component {@link ComponentLike} text pro hover efekt nad textem
+     */
+    public void send(@NotNull Player player, @NotNull String message, @Nullable ComponentLike component) {
+        this.message = message;
+        player.sendMessage(processMessage(message, component));
         if (overrideKey != null) this.overrideKey = null;
     }
 
@@ -78,7 +99,7 @@ public enum ChatInfo {
      */
     public void send(@NotNull CommandSender sender, @NotNull String message) {
         this.message = message;
-        sender.sendMessage(processMessage(message));
+        sender.sendMessage(processMessage(message, null));
         if (overrideKey != null) this.overrideKey = null;
     }
 
@@ -98,7 +119,28 @@ public enum ChatInfo {
         }
         Player onlinePlayer = Bukkit.getPlayer(player);
         assert onlinePlayer != null;
-        onlinePlayer.sendMessage(processMessage(message));
+        onlinePlayer.sendMessage(processMessage(message, null));
+        if (overrideKey != null) this.overrideKey = null;
+    }
+
+    /**
+     * Odešle vytvořenou zprávu hráči, pokud je online.
+     * Pokud hráč není online, metoda neprovede nic a vrátí void.
+     *
+     * Barvu dle klíče {@link ChatInfo} lze v textu používat jako "{c}"
+     *
+     * @param player Online hráč
+     * @param message Zpráva, co se pošle hráči
+     * @param component {@link ComponentLike} text pro hover efekt nad textem
+     */
+    public void send(@NotNull String player, @NotNull String message, @Nullable ComponentLike component) {
+        this.message = message;
+        if (Bukkit.getPlayer(player) == null) {
+            return;
+        }
+        Player onlinePlayer = Bukkit.getPlayer(player);
+        assert onlinePlayer != null;
+        onlinePlayer.sendMessage(processMessage(message, component));
         if (overrideKey != null) this.overrideKey = null;
     }
 
@@ -119,11 +161,22 @@ public enum ChatInfo {
      * @param message Zpráva na zpracování
      * @return Zpracovaná zpráva s barvou
      */
-    public @NotNull String processMessage(String message) {
+    public @NotNull ComponentLike processMessage(@NotNull String message, @Nullable ComponentLike hoverText) {
+        TextColor textColor = TextColor.color(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
         if (overrideKey != null) {
-            return this.overrideKey + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
+            return Component.text(this.overrideKey).color(NamedTextColor.WHITE).append(Component.text(" ")).
+                    append(Component.text(message).color(textColor));
         }
-        return this.key + " " + ChatColor.of(this.color) + message.replace("{c}",  ChatColor.of(this.color).toString());
+        TextReplacementConfig colorReset = TextReplacementConfig.builder().matchLiteral("{c}").replacement(Component.text().color(textColor)).build();
+        if (hoverText != null) {
+            HoverEvent<Component> prefixHover = HoverEvent.showText(this.prepareHoverText(this.key));
+            HoverEvent<Component> textHover = HoverEvent.showText(hoverText);
+            return Component.empty().append(Component.text(this.key).hoverEvent(prefixHover).color(NamedTextColor.WHITE))
+                    .append(Component.text(" ")).append(Component.text(message).replaceText(colorReset).color(textColor).hoverEvent(textHover));
+        }
+        HoverEvent<Component> prefixHover = HoverEvent.showText(this.prepareHoverText(this.key));
+        return Component.empty().append(Component.text(this.key).hoverEvent(prefixHover).color(NamedTextColor.WHITE))
+                .append(Component.text(" ")).append(Component.text(message).replaceText(colorReset).color(textColor));
     }
 
     /**
@@ -137,5 +190,28 @@ public enum ChatInfo {
     public <T extends String> ChatInfo overridePrefix(T prefixKey) {
         this.overrideKey = prefixKey;
         return this;
+    }
+
+    private ComponentLike prepareHoverText(String key) {
+        switch (key) {
+            case "⻫" -> { // Info
+                return Component.text("Informační zpráva").color(ServerColors.INFO.getTextColor());
+            }
+            case "⻬" -> { // Error
+                return Component.text("Chyba").color(ServerColors.DANGER.getTextColor());
+            }
+            case "⻪" -> { // Success
+                return Component.text("Úspěch").color(ServerColors.SUCCESS.getTextColor());
+            }
+            case "⻮", "쇛", "쇜" -> { // Bank
+                return Component.text("Server banka").color(ServerColors.ECONOMY.getTextColor());
+            }
+            case "⼧" -> { // Server
+                return Component.text("Server").color(ServerColors.SERVER.getTextColor());
+            }
+            default -> {
+                return Component.empty();
+            }
+        }
     }
 }

@@ -3,6 +3,10 @@ package cz.craftmania.craftlibs.utils;
 import net.kyori.adventure.text.format.TextColor;
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * Tento enum obsahuje všechyn základní barvy používané na serveru
+ * v informačních zprávách, menu a notifikacích.
+ */
 public enum ServerColors {
 
     // Basic
