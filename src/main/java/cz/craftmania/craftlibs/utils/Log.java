@@ -1,5 +1,6 @@
 package cz.craftmania.craftlibs.utils;
 
+@Deprecated()
 public class Log {
 
     public static void send(String message) {

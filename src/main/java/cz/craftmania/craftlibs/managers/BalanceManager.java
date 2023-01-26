@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@Deprecated(forRemoval = true)
 public class BalanceManager implements PluginMessageListener {
 
     private final Multimap<MessageContext, Consumer<ByteArrayDataInput>> contexts = LinkedHashMultimap.create();
