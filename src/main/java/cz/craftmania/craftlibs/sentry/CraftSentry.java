@@ -8,7 +8,7 @@ import io.sentry.SentryClientFactory;
 import io.sentry.context.Context;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;

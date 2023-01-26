@@ -3,7 +3,6 @@ package cz.craftmania.craftlibs;
 import cz.craftmania.craftlibs.command.ConfirmActionCommand;
 import cz.craftmania.craftlibs.exceptions.CraftLibsCredentialsDefaultException;
 import cz.craftmania.craftlibs.exceptions.CraftLibsFeatureNotEnabledException;
-import cz.craftmania.craftlibs.managers.BalanceManager;
 import cz.craftmania.craftlibs.managers.UpdateManager;
 import cz.craftmania.craftlibs.sql.SQLManager;
 import cz.craftmania.craftlibs.utils.Log;
@@ -25,7 +24,6 @@ public class CraftLibs extends JavaPlugin {
     private static boolean sqlDefault = false;
 
     private static SQLManager sqlManager;
-    private BalanceManager balanceManager;
 
     @Override
     public void onEnable() {
@@ -55,7 +53,6 @@ public class CraftLibs extends JavaPlugin {
             }
             sqlManager = new SQLManager(this);
         }
-        balanceManager = new BalanceManager(this);
 
         getCommand("confirmaction").setExecutor(new ConfirmActionCommand());
         Bukkit.getPluginManager().registerEvents(new ConfirmAction(), this);
@@ -94,9 +91,5 @@ public class CraftLibs extends JavaPlugin {
             throw new CraftLibsCredentialsDefaultException("SQL feature is disabled because of default SQL credentials in config");
         }
         return sqlManager;
-    }
-
-    public BalanceManager getBalanceManager() {
-        return balanceManager;
     }
 }
