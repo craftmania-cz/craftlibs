@@ -1,5 +1,6 @@
 package cz.craftmania.craftlibs.utils;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.md_5.bungee.api.ChatColor;
 
 public enum ServerColors {
@@ -51,7 +52,16 @@ public enum ServerColors {
         this.hexColor = hexColor;
     }
 
-    public ChatColor get() {
+    @Deprecated
+    public ChatColor getChatColor() {
         return ChatColor.of(this.hexColor);
+    }
+
+    public String getHexColor() {
+        return this.hexColor;
+    }
+
+    public TextColor getTextColor() {
+        return TextColor.fromHexString(this.hexColor);
     }
 }
