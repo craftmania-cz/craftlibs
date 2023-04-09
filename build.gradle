@@ -8,7 +8,7 @@ apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 group 'cz.craftmania.craftlibs'
-def mainVersion = '1.1.14'
+def mainVersion = '1.1.15'
 
 sourceCompatibility = 17
 targetCompatibility = 17
@@ -52,7 +52,7 @@ artifacts {
 }
 
 dependencies {
-    compileOnly ('io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT')
+    compileOnly ('io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT')
 
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
     implementation group: 'org.jetbrains', name: 'annotations', version:'16.0.2'
