@@ -55,11 +55,9 @@ dependencies {
     compileOnly ('io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT')
 
     implementation group: 'com.zaxxer', name: 'HikariCP', version: '2.6.1'
-    implementation 'io.sentry:sentry:1.7.30'
-    implementation 'io.sentry:sentry-log4j2:1.7.30'
-    implementation 'org.jetbrains:annotations:16.0.2'
+    implementation group: 'org.jetbrains', name: 'annotations', version:'16.0.2'
     implementation group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.30'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
     compileOnly "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
 }

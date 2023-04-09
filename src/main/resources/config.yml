@@ -11,14 +11,9 @@ settings:
   timeout: 30000
   poolname: CraftLibs
 
-
 updater:
   enabled: false
   plugins:
     - 'example'
-
-sentry:
-  enabled: false
-  dsn: ''
 
 server-id: ''
