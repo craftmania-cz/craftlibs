@@ -167,7 +167,7 @@ public enum ChatInfo {
             return Component.text(this.overrideKey).color(NamedTextColor.WHITE).append(Component.text(" ")).
                     append(Component.text(message).color(textColor));
         }
-        TextReplacementConfig colorReset = TextReplacementConfig.builder().matchLiteral("{c}").replacement(Component.text().color(textColor)).build();
+        TextReplacementConfig colorReset = TextReplacementConfig.builder().match("{c}").replacement(Component.text().color(textColor)).build();
         if (hoverText != null) {
             HoverEvent<Component> prefixHover = HoverEvent.showText(this.prepareHoverText(this.key));
             HoverEvent<Component> textHover = HoverEvent.showText(hoverText);
