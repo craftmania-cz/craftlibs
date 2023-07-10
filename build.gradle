@@ -65,19 +65,17 @@ dependencies {
 publishing {
     repositories {
         maven {
-            url "https://gitlab.com/api/v4/projects/33600299/packages/maven"
-            credentials(HttpHeaderCredentials) {
-                name = "Private-Token"
-                value = GITLAB_TOKEN
-            }
-            authentication {
-                header(HttpHeaderAuthentication)
+            name = "craftlibs"
+            url = uri("https://maven.pkg.github.com/craftmania-cz/craftlibs")
+            credentials {
+                username = GPR_USER
+                password = GPR_TOKEN
             }
         }
     }
     publications {
-        library(MavenPublication) {
-            from components.java
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
         }
     }
 }
