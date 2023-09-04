@@ -1,4 +1,0 @@
-include:
-  - project: 'craftmania/gitlab/gitlab-ci-templates'
-    file: '/gitlab-ci-base-java-shadow.yml'
-    ref: main
