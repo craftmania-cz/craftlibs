@@ -4,7 +4,7 @@
 </p>
 <p align="center">
   <a href="https://java.com/">
-    <img src="http://ForTheBadge.com/images/badges/made-with-java.svg" alt="Made with Java">
+    <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Made with Java">
   </a>
 </p>
 <p align="center">
